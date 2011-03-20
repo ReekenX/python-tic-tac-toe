@@ -2,6 +2,7 @@ from sys import exit
 from random import randint
 from board import Board, HUMAN, COMPUTER
 
+
 def humanize_coord(coord):
     if coord == HUMAN:
         return 'O'
@@ -21,9 +22,9 @@ def print_board(board):
 
 number = None
 while not number in ["1", "2", "0"]:
-    print "==========================================================="
-    print "   Tic Tac Toe - yep, another game version of this game.   "
-    print "==========================================================="
+    print "============================================================"
+    print "  Tic Tac Toe - yep, another implementation of this game.   "
+    print "============================================================"
     print
     print "Choose who should start the game first?"
     print
