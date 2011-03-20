@@ -1,3 +1,4 @@
+EMPTY = 0
 HUMAN = 1
 COMPUTER = 2
 
@@ -5,30 +6,60 @@ COMPUTER = 2
 class Board(object):
     whos_turn = HUMAN
     board = []
+    max_width = 3
+    max_height = 3
 
     def __init__(self):
-        pass
+        self.clear()
+
+    def clear(self):
+        self.board = [[EMPTY] * 3] * 3
 
     def is_clear(self):
         """
         Returns True if all coords are clear.
         """
-        pass
+        for x in range(self.max_width):
+            for y in range(self.max_height):
+                if self.board[x][y] != EMPTY:
+                    return False
+        return True
 
     def can_put(self, x, y):
-        pass
+        return self.board[x][y] == EMPTY
 
     def put(self, x, y, player):
-        pass
+        if self.can_put(x, y):
+            self.board[x][y] = player
+            self.next_player()
+            return True
+        return False
+
+    def next_player(self):
+        if self.whos_turn == HUMAN:
+            self.whos_turn = COMPUTER
+        else:
+            self.whos_turn = HUMAN
+        return self.whos_turn
 
     def owner_of(self, x, y):
-        pass
+        """
+        Returns who's reserved coordinate in board.
+        """
+        return self.board[x][y]
 
     def player_starts(self, player):
-        pass
+        """
+        Set's player who's turn is now.
+        """
+        if player != self.player_turn():
+            self.whos_turn = player
 
     def player_turn(self):
-        pass
+        """
+        Returns player who's turn is now.
+        """
+        return self.whos_turn
 
     def is_winner(self):
         pass
@@ -44,11 +75,16 @@ class Board(object):
         """
         pass
 
-    def valid_moves(self, x, y):
+    def valid_moves(self):
         """
         Returns list of all available x and y coords.
         """
-        pass
+        valid_moves = []
+        for x in range(self.max_width):
+            for y in range(self.max_height):
+                if self.board[x][y] == EMPTY:
+                    valid_moves.append([x, y])
+        return valid_moves
 
     def get_best_move(self, player=None):
         """
