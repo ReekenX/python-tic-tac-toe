@@ -61,11 +61,22 @@ class Board(object):
         """
         return self.whos_turn
 
-    def is_winner(self):
-        pass
-
     def get_winner(self):
-        pass
+        """
+        Returns None if board has no winner yet or returns HUMAN or COMPUTER
+        if winner exists.
+        """
+        for x in range(self.max_width):
+            if self.board[x][0] == self.board[x][1] == self.board[x][2]:
+                return self.board[x][0]
+
+        if self.board[0][0] == self.board[1][1] == self.board[2][2]:
+            return self.board[0][0]
+
+        if self.board[0][2] == self.board[1][1] == self.board[2][0]:
+            return self.board[0][2]
+
+        return None
 
     def evaluate_move(self, x, y, player):
         """

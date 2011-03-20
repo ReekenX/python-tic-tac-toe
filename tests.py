@@ -5,7 +5,6 @@ from board import Board, HUMAN, COMPUTER, EMPTY
 class TestBoard(TestCase):
     def setUp(self):
         self.board = Board()
-        pass
 
     def test_board(self):
         self.assertTrue(self.board.is_clear())
@@ -49,19 +48,31 @@ class TestBoard(TestCase):
         board = [[HUMAN, EMPTY, EMPTY],
                  [EMPTY, HUMAN, EMPTY],
                  [EMPTY, EMPTY, HUMAN]]
-        self.assertTrue(self.board.is_winner())
+        self.board.board = board
         self.assertEqual(HUMAN, self.board.get_winner())
 
-        board = [[EMPTY, HUMAN, EMPTY],
-                 [EMPTY, HUMAN, EMPTY],
+        board = [[HUMAN, EMPTY, COMPUTER],
+                 [HUMAN, HUMAN, HUMAN],
+                 [COMPUTER, COMPUTER, EMPTY]]
+        self.board.board = board
+        self.assertEqual(HUMAN, self.board.get_winner())
+
+        board = [[EMPTY, HUMAN, COMPUTER],
+                 [COMPUTER, HUMAN, COMPUTER],
                  [EMPTY, COMPUTER, HUMAN]]
-        self.assertFalse(self.board.is_winner())
+        self.board.board = board
         self.assertEqual(None, self.board.get_winner())
 
         board = [[EMPTY, HUMAN, COMPUTER],
                  [HUMAN, COMPUTER, HUMAN],
                  [COMPUTER, COMPUTER, HUMAN]]
-        self.assertTrue(self.board.is_winner())
+        self.board.board = board
+        self.assertEqual(COMPUTER, self.board.get_winner())
+
+        board = [[EMPTY, HUMAN, HUMAN],
+                 [HUMAN, COMPUTER, HUMAN],
+                 [COMPUTER, COMPUTER, COMPUTER]]
+        self.board.board = board
         self.assertEqual(COMPUTER, self.board.get_winner())
 
     def test_evaluate_move(self):
