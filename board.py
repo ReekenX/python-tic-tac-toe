@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 EMPTY = 0
 HUMAN = 1
 COMPUTER = 2
@@ -16,7 +19,9 @@ class Board(object):
         """
         Clears the board.
         """
-        self.board = [[EMPTY] * 3] * 3
+        self.board = []
+        for x in range(self.max_width):
+            self.board.append([EMPTY, EMPTY, EMPTY])
 
     def is_clear(self):
         """
@@ -79,17 +84,17 @@ class Board(object):
         if winner exists.
         """
         for x in range(self.max_width):
-            if self.board[x][0] == self.board[x][1] == self.board[x][2]:
+            if self.board[x][0] == self.board[x][1] == self.board[x][2] and self.board[x][0] != EMPTY:
                 return self.board[x][0]
 
         for y in range(self.max_width):
-            if self.board[0][y] == self.board[1][y] == self.board[2][y]:
+            if self.board[0][y] == self.board[1][y] == self.board[2][y] and self.board[0][y] != EMPTY:
                 return self.board[0][y]
 
-        if self.board[0][0] == self.board[1][1] == self.board[2][2]:
+        if self.board[0][0] == self.board[1][1] == self.board[2][2] and self.board[0][0] != EMPTY:
             return self.board[0][0]
 
-        if self.board[0][2] == self.board[1][1] == self.board[2][0]:
+        if self.board[0][2] == self.board[1][1] == self.board[2][0] and self.board[0][2] != EMPTY:
             return self.board[0][2]
 
         return None
@@ -99,7 +104,7 @@ class Board(object):
         Returns 1 if player with movement to this (x, y) position
         wins the game, 0 if nothing will happen with this movement.
         """
-        orig_board = self.board
+        orig_board = deepcopy(self.board)
         self.put(x, y, player)
         if self.get_winner() == player:
             self.board = orig_board

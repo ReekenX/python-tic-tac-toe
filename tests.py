@@ -90,6 +90,10 @@ class TestBoard(TestCase):
                             [COMPUTER, HUMAN, EMPTY],
                             [COMPUTER, EMPTY, HUMAN]]
         self.assertEqual(1, self.board.evaluate_move(0, 0, HUMAN))
+        board = [[EMPTY, EMPTY, EMPTY],
+                 [COMPUTER, HUMAN, EMPTY],
+                 [COMPUTER, EMPTY, HUMAN]]
+        self.assertEqual(board, self.board.board)
 
         self.board.board = [[EMPTY, EMPTY, EMPTY],
                             [COMPUTER, HUMAN, EMPTY],
