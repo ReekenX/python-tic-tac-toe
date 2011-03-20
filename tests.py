@@ -45,43 +45,56 @@ class TestBoard(TestCase):
         self.assertEqual(COMPUTER, self.board.player_turn())
 
     def test_winner(self):
-        board = [[HUMAN, EMPTY, EMPTY],
-                 [EMPTY, HUMAN, EMPTY],
-                 [EMPTY, EMPTY, HUMAN]]
-        self.board.board = board
+        self.board.board = [[HUMAN, EMPTY, EMPTY],
+                            [EMPTY, HUMAN, EMPTY],
+                            [EMPTY, EMPTY, HUMAN]]
         self.assertEqual(HUMAN, self.board.get_winner())
 
-        board = [[HUMAN, EMPTY, COMPUTER],
-                 [HUMAN, HUMAN, HUMAN],
-                 [COMPUTER, COMPUTER, EMPTY]]
-        self.board.board = board
+        self.board.board = [[HUMAN, EMPTY, COMPUTER],
+                            [HUMAN, HUMAN, HUMAN],
+                            [COMPUTER, COMPUTER, EMPTY]]
         self.assertEqual(HUMAN, self.board.get_winner())
 
-        board = [[EMPTY, HUMAN, COMPUTER],
-                 [COMPUTER, HUMAN, COMPUTER],
-                 [EMPTY, COMPUTER, HUMAN]]
-        self.board.board = board
+        self.board.board = [[EMPTY, HUMAN, COMPUTER],
+                            [COMPUTER, HUMAN, COMPUTER],
+                            [EMPTY, COMPUTER, HUMAN]]
         self.assertEqual(None, self.board.get_winner())
 
-        board = [[EMPTY, HUMAN, COMPUTER],
-                 [HUMAN, COMPUTER, HUMAN],
-                 [COMPUTER, COMPUTER, HUMAN]]
-        self.board.board = board
+        self.board.board = [[EMPTY, HUMAN, COMPUTER],
+                            [HUMAN, COMPUTER, HUMAN],
+                            [COMPUTER, COMPUTER, HUMAN]]
         self.assertEqual(COMPUTER, self.board.get_winner())
 
-        board = [[EMPTY, HUMAN, HUMAN],
-                 [HUMAN, COMPUTER, HUMAN],
-                 [COMPUTER, COMPUTER, COMPUTER]]
-        self.board.board = board
+        self.board.board = [[EMPTY, HUMAN, HUMAN],
+                            [HUMAN, COMPUTER, HUMAN],
+                            [COMPUTER, COMPUTER, COMPUTER]]
         self.assertEqual(COMPUTER, self.board.get_winner())
+
+        self.board.board = [[EMPTY, HUMAN, HUMAN],
+                            [HUMAN, COMPUTER, HUMAN],
+                            [COMPUTER, COMPUTER, COMPUTER]]
+        self.assertEqual(COMPUTER, self.board.get_winner())
+
+        self.board.board = [[HUMAN, COMPUTER, HUMAN],
+                            [HUMAN, COMPUTER, HUMAN],
+                            [HUMAN, HUMAN, COMPUTER]]
+        self.assertEqual(HUMAN, self.board.get_winner())
+
+        self.board.board = [[HUMAN, COMPUTER, HUMAN],
+                            [COMPUTER, COMPUTER, HUMAN],
+                            [HUMAN, EMPTY, HUMAN]]
+        self.assertEqual(HUMAN, self.board.get_winner())
 
     def test_evaluate_move(self):
-        board = [[EMPTY, EMPTY, EMPTY],
-                 [COMPUTER, HUMAN, EMPTY],
-                 [COMPUTER, EMPTY, HUMAN]]
-        self.board.board = board
+        self.board.board = [[EMPTY, EMPTY, EMPTY],
+                            [COMPUTER, HUMAN, EMPTY],
+                            [COMPUTER, EMPTY, HUMAN]]
         self.assertEqual(1, self.board.evaluate_move(0, 0, HUMAN))
-        self.assertEqual(-1, self.board.evaluate_move(0, 1, HUMAN))
+
+        self.board.board = [[EMPTY, EMPTY, EMPTY],
+                            [COMPUTER, HUMAN, EMPTY],
+                            [COMPUTER, EMPTY, HUMAN]]
+        self.assertEqual(0, self.board.evaluate_move(0, 1, HUMAN))
 
     def test_valid_moves(self):
         board = [[EMPTY, EMPTY, HUMAN],
@@ -89,14 +102,17 @@ class TestBoard(TestCase):
                  [COMPUTER, COMPUTER, HUMAN]]
         self.board.board = board
         valid = [[0, 0], [0, 1]]
-        self.assertEqual(valid, self.board.valid_moves())
+        self.assertEqual(valid, self.board.get_valid_moves())
 
     def test_best_move(self):
-        board = [[EMPTY, EMPTY, EMPTY],
-                 [COMPUTER, HUMAN, EMPTY],
-                 [COMPUTER, EMPTY, HUMAN]]
-        self.board.board = board
+        self.board.board = [[EMPTY, EMPTY, EMPTY],
+                            [COMPUTER, HUMAN, EMPTY],
+                            [COMPUTER, EMPTY, HUMAN]]
         self.assertEqual([0, 0], self.board.get_best_move(HUMAN))
+
+        self.board.board = [[EMPTY, EMPTY, EMPTY],
+                            [COMPUTER, HUMAN, EMPTY],
+                            [COMPUTER, EMPTY, HUMAN]]
         self.assertEqual([0, 0], self.board.get_best_move(COMPUTER))
 
 

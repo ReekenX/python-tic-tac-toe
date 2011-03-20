@@ -13,6 +13,9 @@ class Board(object):
         self.clear()
 
     def clear(self):
+        """
+        Clears the board.
+        """
         self.board = [[EMPTY] * 3] * 3
 
     def is_clear(self):
@@ -26,9 +29,15 @@ class Board(object):
         return True
 
     def can_put(self, x, y):
+        """
+        Returns True if coord in the board is empty.
+        """
         return self.board[x][y] == EMPTY
 
     def put(self, x, y, player):
+        """
+        Puts player gues in board.
+        """
         if self.can_put(x, y):
             self.board[x][y] = player
             self.next_player()
@@ -36,6 +45,9 @@ class Board(object):
         return False
 
     def next_player(self):
+        """
+        Shitches and returns next player who's turn.
+        """
         if self.whos_turn == HUMAN:
             self.whos_turn = COMPUTER
         else:
@@ -70,6 +82,10 @@ class Board(object):
             if self.board[x][0] == self.board[x][1] == self.board[x][2]:
                 return self.board[x][0]
 
+        for y in range(self.max_width):
+            if self.board[0][y] == self.board[1][y] == self.board[2][y]:
+                return self.board[0][y]
+
         if self.board[0][0] == self.board[1][1] == self.board[2][2]:
             return self.board[0][0]
 
@@ -81,12 +97,18 @@ class Board(object):
     def evaluate_move(self, x, y, player):
         """
         Returns 1 if player with movement to this (x, y) position
-        wins the game, 0 if nothing will happen with this movement,
-        -1 if player will lose the game putting here.
+        wins the game, 0 if nothing will happen with this movement.
         """
-        pass
+        orig_board = self.board
+        self.put(x, y, player)
+        if self.get_winner() == player:
+            self.board = orig_board
+            return 1
+        else:
+            self.board = orig_board
+            return 0
 
-    def valid_moves(self):
+    def get_valid_moves(self):
         """
         Returns list of all available x and y coords.
         """
@@ -101,5 +123,18 @@ class Board(object):
         """
         Returns the best movement coords. If `player` is None, then
         `whos_turn` player will be simulated.
+
+        None will be returned if no valid moves available, game should be then stoped.
         """
-        pass
+        if not player:
+            player = self.player_turn()
+
+        valid_moves = self.get_valid_moves()
+        if len(valid_moves) < 1:
+            return None
+
+        for move in valid_moves:
+            if self.evaluate_move(move[0], move[1], player) == 1:
+                return move
+
+        return valid_moves[0]
