@@ -1,3 +1,4 @@
+from copy import deepcopy
 from unittest import TestCase, main
 from board import Board, HUMAN, COMPUTER, EMPTY
 
@@ -19,6 +20,15 @@ class TestBoard(TestCase):
         self.assertFalse(self.board.is_clear())
         self.board.clear()
         self.assertTrue(self.board.is_clear())
+
+    def test_full(self):
+        self.assertFalse(self.board.is_full())
+        self.board.put(1, 1, HUMAN)
+        self.assertFalse(self.board.is_full())
+        self.board.board = [[COMPUTER, COMPUTER, COMPUTER],
+                            [COMPUTER, HUMAN, COMPUTER],
+                            [COMPUTER, COMPUTER, COMPUTER]]
+        self.assertTrue(self.board.is_full())
 
     def test_put(self):
         self.assertTrue(self.board.can_put(0, 0))
@@ -55,6 +65,11 @@ class TestBoard(TestCase):
                             [COMPUTER, COMPUTER, EMPTY]]
         self.assertEqual(HUMAN, self.board.get_winner())
 
+        self.board.board = [[COMPUTER, HUMAN, COMPUTER],
+                            [COMPUTER, HUMAN, COMPUTER],
+                            [HUMAN, COMPUTER, HUMAN]]
+        self.assertEqual(EMPTY, self.board.get_winner())
+
         self.board.board = [[EMPTY, HUMAN, COMPUTER],
                             [COMPUTER, HUMAN, COMPUTER],
                             [EMPTY, COMPUTER, HUMAN]]
@@ -86,19 +101,15 @@ class TestBoard(TestCase):
         self.assertEqual(HUMAN, self.board.get_winner())
 
     def test_evaluate_move(self):
-        self.board.board = [[EMPTY, EMPTY, EMPTY],
-                            [COMPUTER, HUMAN, EMPTY],
-                            [COMPUTER, EMPTY, HUMAN]]
-        self.assertEqual(1, self.board.evaluate_move(0, 0, HUMAN))
         board = [[EMPTY, EMPTY, EMPTY],
                  [COMPUTER, HUMAN, EMPTY],
                  [COMPUTER, EMPTY, HUMAN]]
+        self.board.board = deepcopy(board)
+        self.assertEqual(1, self.board.evaluate_move(0, 0, HUMAN))
+        self.assertEqual(1, self.board.evaluate_move(0, 0, COMPUTER))
         self.assertEqual(board, self.board.board)
-
-        self.board.board = [[EMPTY, EMPTY, EMPTY],
-                            [COMPUTER, HUMAN, EMPTY],
-                            [COMPUTER, EMPTY, HUMAN]]
         self.assertEqual(0, self.board.evaluate_move(0, 1, HUMAN))
+        self.assertEqual(board, self.board.board)
 
     def test_valid_moves(self):
         board = [[EMPTY, EMPTY, HUMAN],
@@ -109,15 +120,29 @@ class TestBoard(TestCase):
         self.assertEqual(valid, self.board.get_valid_moves())
 
     def test_best_move(self):
-        self.board.board = [[EMPTY, EMPTY, EMPTY],
-                            [COMPUTER, HUMAN, EMPTY],
-                            [COMPUTER, EMPTY, HUMAN]]
+        board = [[EMPTY, EMPTY, EMPTY],
+                 [COMPUTER, HUMAN, EMPTY],
+                 [COMPUTER, EMPTY, HUMAN]]
+        self.board.board = deepcopy(board)
+        self.board.player_starts(HUMAN)
         self.assertEqual([0, 0], self.board.get_best_move(HUMAN))
+        self.assertEqual(board, self.board.board)
+        self.assertEqual(HUMAN, self.board.player_turn())
 
-        self.board.board = [[EMPTY, EMPTY, EMPTY],
-                            [COMPUTER, HUMAN, EMPTY],
-                            [COMPUTER, EMPTY, HUMAN]]
+        self.board.board = deepcopy(board)
+        self.board.player_starts(COMPUTER)
         self.assertEqual([0, 0], self.board.get_best_move(COMPUTER))
+        self.assertEqual(board, self.board.board)
+        self.assertEqual(COMPUTER, self.board.player_turn())
+
+        board = [[EMPTY, EMPTY, HUMAN],
+                 [COMPUTER, HUMAN, EMPTY],
+                 [EMPTY, COMPUTER, EMPTY]]
+        self.board.board = deepcopy(board)
+        self.board.player_starts(COMPUTER)
+        self.assertEqual([2, 0], self.board.get_best_move(COMPUTER))
+        self.assertEqual(board, self.board.board)
+        self.assertEqual(COMPUTER, self.board.player_turn())
 
 
 if __name__ == '__main__':

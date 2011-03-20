@@ -20,12 +20,13 @@ def print_board(board):
         print "|         |         |         |"
     print "-------------------------------"
 
+print "============================================================"
+print "  Tic Tac Toe - yep, another implementation of this game.   "
+print "============================================================"
+print
+
 number = None
 while not number in ["1", "2", "0"]:
-    print "============================================================"
-    print "  Tic Tac Toe - yep, another implementation of this game.   "
-    print "============================================================"
-    print
     print "Choose who should start the game first?"
     print
     print "              1) You"
@@ -36,7 +37,7 @@ while not number in ["1", "2", "0"]:
     if number == None:
         number = raw_input("Enter number. But choose wisely - all hopes in you: ")
     else:
-        number = raw_input("Oops, I have said, that only numbers are allowed: ")
+        number = raw_input("Oops, I have said that only numbers are allowed: ")
     print
 
 board = Board()
@@ -61,9 +62,9 @@ while board.get_winner() == None:
     if board.player_turn() == HUMAN:
         x = int(raw_input("Now is your turn. Enter X coord starting from 0 to 2: "))
         y = int(raw_input("                  Enter Y coord starting from 0 to 2: "))
+        print
         while x not in [0, 1, 2] or y not in [0, 1, 2] or not board.can_put(x, y):
             first = False
-            print
             if x not in [0, 1, 2] or y not in [0, 1, 2]:
                 print "Oops, invalid coords. Please try again."
             else:
@@ -71,6 +72,7 @@ while board.get_winner() == None:
             print
             x = int(raw_input("Enter X coord starting from 0 to 2: "))
             y = int(raw_input("Enter Y coord starting from 0 to 2: "))
+            print
     else:
         print "Computer thinking... Oh, here it is:"
         print
@@ -86,6 +88,8 @@ if board.get_winner() == COMPUTER:
     print "Yep, you can't win against Super Computer. But you can try..."
 elif board.get_winner() == HUMAN:
     print "Impossible! You won against the Super Computer! Congrats!"
+else:
+    print "Well, next time maybe, next time..."
 
 print
 raw_input("Game ended, hope you will return back for more. Press ENTER to close...")

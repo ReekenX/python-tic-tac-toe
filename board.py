@@ -33,6 +33,16 @@ class Board(object):
                     return False
         return True
 
+    def is_full(self):
+        """
+        Returns True if all coords are filled.
+        """
+        for x in range(self.max_width):
+            for y in range(self.max_height):
+                if self.board[x][y] == EMPTY:
+                    return False
+        return True
+
     def can_put(self, x, y):
         """
         Returns True if coord in the board is empty.
@@ -97,7 +107,10 @@ class Board(object):
         if self.board[0][2] == self.board[1][1] == self.board[2][0] and self.board[0][2] != EMPTY:
             return self.board[0][2]
 
-        return None
+        if self.is_full():
+            return EMPTY
+        else:
+            return None
 
     def evaluate_move(self, x, y, player):
         """
@@ -105,13 +118,15 @@ class Board(object):
         wins the game, 0 if nothing will happen with this movement.
         """
         orig_board = deepcopy(self.board)
+        orig_player = self.player_turn()
         self.put(x, y, player)
         if self.get_winner() == player:
-            self.board = orig_board
-            return 1
+            result = 1
         else:
-            self.board = orig_board
-            return 0
+            result = 0
+        self.board = deepcopy(orig_board)
+        self.player_starts(orig_player)
+        return result
 
     def get_valid_moves(self):
         """
@@ -140,6 +155,14 @@ class Board(object):
 
         for move in valid_moves:
             if self.evaluate_move(move[0], move[1], player) == 1:
+                return move
+
+        if player == HUMAN:
+            opponent = COMPUTER
+        else:
+            opponent = HUMAN
+        for move in valid_moves:
+            if self.evaluate_move(move[0], move[1], opponent) == 1:
                 return move
 
         return valid_moves[0]
