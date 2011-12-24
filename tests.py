@@ -7,21 +7,17 @@ class TestBoard(TestCase):
     def setUp(self):
         self.board = Board()
 
-    def test_board(self):
+    def test_clear_board_on_start(self):
         self.assertTrue(self.board.is_clear())
-        board = [[EMPTY, EMPTY, EMPTY],
-                 [EMPTY, EMPTY, EMPTY],
-                 [EMPTY, EMPTY, EMPTY]]
-        self.assertEqual(board, self.board.board)
 
-    def test_clear(self):
+    def test_clear_board(self):
         self.assertTrue(self.board.is_clear())
         self.board.put(0, 0, HUMAN)
         self.assertFalse(self.board.is_clear())
         self.board.clear()
         self.assertTrue(self.board.is_clear())
 
-    def test_full(self):
+    def test_full_board(self):
         self.assertFalse(self.board.is_full())
         self.board.put(1, 1, HUMAN)
         self.assertFalse(self.board.is_full())
@@ -30,7 +26,7 @@ class TestBoard(TestCase):
                             [COMPUTER, COMPUTER, COMPUTER]]
         self.assertTrue(self.board.is_full())
 
-    def test_put(self):
+    def test_can_put_on_board(self):
         self.assertTrue(self.board.can_put(0, 0))
         self.assertTrue(self.board.put(0, 0, HUMAN))
 
@@ -54,7 +50,7 @@ class TestBoard(TestCase):
         self.assertTrue(self.board.put(0, 0, HUMAN))
         self.assertEqual(COMPUTER, self.board.player_turn())
 
-    def test_winner(self):
+    def test_game_winner(self):
         self.board.board = [[HUMAN, EMPTY, EMPTY],
                             [EMPTY, HUMAN, EMPTY],
                             [EMPTY, EMPTY, HUMAN]]
